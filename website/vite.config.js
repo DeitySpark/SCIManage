@@ -12,20 +12,22 @@ export default defineConfig({
   base: "./", //打包路径
   VITE_BASE_API: "http://localhost:5500/", //配置全局变量替换规则
   viteMockServe: {
-    supportTs: false,
-    logger: false,
-    mockPath: "./mock/index.js",
+    supportTs: true,
+    logger: false,   //是否在控制台显示请求日志
+    mockPath: "./mock/index.js",    //指定模拟函数文件夹
   },
-  publicPath:'/',
-  server: {   //配置代理
-    port: 8081,
+  publicPath: '/',
+  // 配置代理解决跨域
+  server: {
     proxy: {
-      "/admin": {
-        target: "http://localhost:5500/",
-        changeOrigin: true
-
-      },
-    },
+      '/api': {
+        target: 'http://localhost:5500/',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '')
+      }
+    }
+  },
+  resolve: {  
   },
   plugins: [
     vue(),
